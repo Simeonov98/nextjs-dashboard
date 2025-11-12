@@ -1,4 +1,4 @@
-'use server';
+'use server'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -17,8 +17,7 @@ const FormSchema = z.object({
 const CreateInvoice = FormSchema.omit({ id: true, date: true })
 
 
-
-export async function createInvoice(formData: FormData) {
+export async function createInvoice(prevState:any,formData: FormData) {
   const { customerId, amount, status } = CreateInvoice.parse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
@@ -34,7 +33,7 @@ export async function createInvoice(formData: FormData) {
   } catch (error) {
     // We'll also log the error to the console for now
     console.error(error);
-    return {
+  return {
       message: 'Database Error: Failed to Create Invoice.',
     };
   }
