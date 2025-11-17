@@ -3,6 +3,7 @@ import { prisma } from '@/app/lib/prisma';
 import { Metadata } from 'next';
 import { formatCurrency } from '@/app/lib/utils';
 import Link from 'next/link';
+import { Invoice } from '@/app/lib/definitions';
 
 
 export const metadata: Metadata = {
@@ -33,11 +34,6 @@ export default async function Page() {
             </div>
             <div>
               <h3 className="text-lg font-semibold">Invoices:</h3>
-              {/* <Link href={`./dashboard/invoices/${customer.invoices.map(i=>i.id)}`} className='text-gray-600 hover:underline'>
-                {(customer.invoices.filter(i => i.status?.toLowerCase() === 'pending') || [])
-                  .map(i => `${i.status} : ${formatCurrency(i.amount)}`)
-                  .join(' | ') || 'No pending invoices'}
-              </Link> */}
               {customer.invoices.length === 0 ? (
                 <p className='text-gray-600'>No invoices</p>
               ) : (
