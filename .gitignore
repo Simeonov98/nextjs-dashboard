@@ -35,3 +35,6 @@ dvlinks.txt
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/generated/prisma
+.env.old

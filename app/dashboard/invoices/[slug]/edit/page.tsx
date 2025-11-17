@@ -8,11 +8,11 @@ export const metadata: Metadata = {
   title: 'Edit Invoices'
 }
  
-export default async function Page(props: { params: Promise<{ id: string }> }) {
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const id = params.id;
+  const slug = params.slug;
   const [invoice,customers] = await Promise.all([
-    fetchInvoiceById(id),
+    fetchInvoiceById(slug),
     fetchCustomers()
   ])
   if(!invoice){
@@ -25,7 +25,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           { label: 'Invoices', href: '/dashboard/invoices' },
           {
             label: 'Edit Invoice',
-            href: `/dashboard/invoices/${id}/edit`,
+            href: `/dashboard/invoices/${slug}/edit`,
             active: true,
           },
         ]}
