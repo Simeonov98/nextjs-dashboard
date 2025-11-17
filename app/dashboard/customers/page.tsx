@@ -38,7 +38,7 @@ export default async function Page() {
                 <p className='text-gray-600'>No invoices</p>
               ) : (
                 <div className='flex flex-wrap gap-2'>
-                  {customer.invoices.map((invoice) => ( 
+                  {customer.invoices.map((invoice:{id:string; slug: string | null; status: string; amount: number}) => ( 
                     <Link
                       key={invoice.id}
                       href={`/dashboard/invoices/${invoice.slug }`}
