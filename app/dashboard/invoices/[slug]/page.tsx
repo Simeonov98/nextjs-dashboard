@@ -1,9 +1,17 @@
-import { prisma } from '@/lib/prisma';
-import { formatCurrency } from '@/app/lib/utils';
+import { prisma } from "@/lib/prisma";
+import { formatCurrency } from "@/app/lib/utils";
 
-export default async function Page({params}) {
-const {slug} = await params;
-console.log('Invoice ID:', slug);
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params; // <-- await here
+
+  if (!slug) {
+    return <div>Invoice slug is missing</div>;
+  }
+
 const invoice = await prisma.invoices.findUnique({
   where: {
     slug: slug, 
