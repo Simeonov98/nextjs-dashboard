@@ -6,7 +6,7 @@ import postgres from 'postgres';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { hash, randomUUID } from 'crypto';
-import { prisma } from '@/prisma/prisma';
+import { prisma } from '@/lib/prisma';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 

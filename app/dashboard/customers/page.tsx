@@ -1,5 +1,5 @@
 import { createInvoice } from '@/app/lib/action';
-import { prisma } from '@/prisma/prisma';
+import { prisma } from '@/lib/prisma';
 import { Metadata } from 'next';
 import { formatCurrency } from '@/app/lib/utils';
 import Link from 'next/link';
