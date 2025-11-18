@@ -1,12 +1,12 @@
 import { prisma } from '@/lib/prisma';
 import { formatCurrency } from '@/app/lib/utils';
 
-export default async function Page({params}: {params: {slug: string}}) {
-// const {slug} = await params;
-// console.log('Invoice ID:', slug);
+export default async function Page({params}) {
+const {slug} = await params;
+console.log('Invoice ID:', slug);
 const invoice = await prisma.invoices.findUnique({
   where: {
-    slug: params.slug, //   Replace with actual invoice ID
+    slug: slug, 
   },
   include: {
     customer: true, // Include related customer data
