@@ -1,4 +1,4 @@
-import { prisma } from '@/app/lib/prisma';
+import { prisma } from '@/prisma/prisma';
 import { formatCurrency } from '@/app/lib/utils';
 
 export default async function Page({params}: {params: {slug: string}}) {
