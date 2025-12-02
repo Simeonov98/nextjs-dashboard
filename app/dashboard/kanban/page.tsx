@@ -9,9 +9,10 @@ import { Board } from "@/app/ui/kanaban/board";
 
 
 
-export default function KanbanPage() {
+export default function KanbanPage() {  
+   
   return (
-    <div className="h-screen w-full bg-neutral-800 text-neutral-500 border rounded-xl">
+    <div className="h-screen w-full bg-neutral-50 text-neutral-500 border rounded-xl">
       <Board />
     </div>
   );

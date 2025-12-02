@@ -1,12 +1,14 @@
 
 
-import React, { useState,useEffect, ReactEventHandler } from "react";
+import React, { useState,useEffect, ReactEventHandler, use } from "react";
 import { prisma } from "@/lib/prisma";
 import { fetchAllTasks } from "@/app/lib/data";
 import { FaFire } from "react-icons/fa";
 import { FiTrash2,FiPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { get } from "http";
+import { createTask,deleteTask,updateTask } from "@/app/lib/action";
+
 
 type CardsType = {
   id: string;
@@ -26,10 +28,10 @@ export const Board = () => {
 
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12">
-      <Column title="Backlog" column="backlog" headingColor="text-neutral-500" cards={cards} setCards={setCards} />
-      <Column title="TODO" column="todo" headingColor="text-yellow-200" cards={cards} setCards={setCards}/>
-      <Column title="In progress" column="doing" headingColor="text-blue-200" cards={cards} setCards={setCards}/>
-      <Column title="Complete" column="done" headingColor="text-emerald-200" cards={cards} setCards={setCards}/>
+      <Column title="Backlog" column="backlog" headingColor="text-neutral-600" cards={cards} setCards={setCards} />
+      <Column title="TODO" column="todo" headingColor="text-yellow-400" cards={cards} setCards={setCards}/>
+      <Column title="In progress" column="doing" headingColor="text-blue-500" cards={cards} setCards={setCards}/>
+      <Column title="Complete" column="done" headingColor="text-emerald-500" cards={cards} setCards={setCards}/>
       <BurnBarrel setCards={setCards}/>
     </div>
   );
@@ -65,6 +67,7 @@ export const Column = ({ title, headingColor, column, cards, setCards }: { title
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
       setCards(copy);
+      updateTask(column, cardToTransfer.title, cardToTransfer.id);
     }
   }
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -108,10 +111,9 @@ export const Column = ({ title, headingColor, column, cards, setCards }: { title
 
     return el;
   };
-      const getIndicators = ():HTMLElement[] => {
-      return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
-    };
-
+  const getIndicators = ():HTMLElement[] => {
+    return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
+  };
   const handleDragLeave = () => {
     const indicators = getIndicators();
     clearHighlights(indicators);
@@ -119,7 +121,7 @@ export const Column = ({ title, headingColor, column, cards, setCards }: { title
   };
 
   return (
-  <div className="w-56 shrink-0">
+  <div className="basis-1/5">
     <div className="mb-3 flex items-center justify-between">
       <h3 className={`font-medium ${headingColor}`}>{title}</h3>
         <span className="rounded text-sm text-neutral-400">
@@ -131,10 +133,10 @@ export const Column = ({ title, headingColor, column, cards, setCards }: { title
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       className={`h-full w-full transition-colors 
-        ${active ? "bg-neutral-800/50" : "bg-neutral-800/0"}`}
+        ${active ? "bg-neutral-300/50" : "bg-neutral-300/0"}`}
       >
         {filteredCards.map((c: any) => {
-          return <Card key={c.id} {...c} handleDragStart={handleDragStart} />
+          return <Card key={c.id} {...c} handleDragStart={handleDragStart} headingColor={headingColor} />
         })}
       <DropIndicator beforeId='-1' column={column} />
       <AddCard setCards={setCards} column={column}/>
@@ -143,7 +145,8 @@ export const Column = ({ title, headingColor, column, cards, setCards }: { title
   )
 
 };
-const Card=({ title, id, column,handleDragStart }: { title: string; id: string; column: string; handleDragStart:Function })=> {
+const Card=({ title, id, column,handleDragStart }: { title: string; id: string; column: string; handleDragStart:Function})=> {
+
   return (
     <>
     <DropIndicator beforeId={id} column={column}/>
@@ -152,9 +155,9 @@ const Card=({ title, id, column,handleDragStart }: { title: string; id: string; 
         layoutId={id}
         draggable="true"
         onDragStart={(e) => handleDragStart(e, { title, id, column })}
-        className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
+        className={`cursor-grab rounded border border-neutral-400 bg-indigo-500 p-3 active:cursor-grabbing`}
       >
-        <p className="text-sm text-neutral-100">{title}</p>
+        <p className="text-sm text-white">{title}</p>
       </motion.div>
     </>
   );
@@ -163,29 +166,35 @@ const AddCard =({setCards, column}:{setCards:Function,column:string})=> {
     const [text, setText] = useState("");
     const [adding, setAdding] = useState(false);
     
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         
-        if(!text.trim().length) return
+        if(!text.trim().length) return;
+        
+        const createdTask = await createTask(column,text)
+        if(!createdTask) return;
+        
+        setCards((prevCards: CardsType[]) => [...prevCards, {
+          id: createdTask?.id,
+          title: text,
+          column
 
-        const newCard = {
-            column,
-            id: crypto.randomUUID(),
-            title: text
-        }
-        setCards((prevCards: CardsType[]) => [...prevCards, newCard]);
+        }]);
+        
         setText("");
         setAdding(false);
     }
+ 
+    
     return(
         <>
         {adding ? (
-            <motion.form layout onSubmit={handleSubmit}>
+            <motion.form layout onSubmit={handleSubmit} >
                 <textarea
                 onChange={(e) => setText(e.target.value)}
                 autoFocus
                 placeholder="Add new Task..."
-                className="w-full rounded border border-violet-400 bg-violet400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
+                className="w-full rounded border border-violet-400 bg-violet400/20 p-3 text-sm text-neutral-450 placeholder-violet-300 focus:outline-0"
                 />  
                 <div className="mt-1.5 flex items-center justify-end gap-1.5">
             <button
@@ -238,13 +247,14 @@ const BurnBarrel=({ setCards }: { setCards: Function }) => {
     const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
         const cardId = e.dataTransfer.getData("cardId");
         setCards((prevCards: CardsType[]) => prevCards.filter(card => card.id !== cardId));
+        deleteTask(cardId);
         setActive(false);
     }
   return (
      <div onDrop={handleDragEnd}
      onDragOver={handleDragOver}
      onDragLeave={handleDragLeave}
-     className={`mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl ${
+     className={`mt-10 grid basis-1/5 shrink-0 place-content-center rounded border text-3xl ${
          active
            ? "border-red-800 bg-red-800/20 text-red-500"
            : "border-neutral-500 bg-neutral-500/20 text-neutral-500"

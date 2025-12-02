@@ -40,5 +40,5 @@ model users {
 model tasks {
   id        String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   title     String @db.VarChar(255)
-  column    String @unique
+  column    String @db.VarChar(255)
 }
