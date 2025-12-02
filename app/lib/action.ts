@@ -7,6 +7,7 @@ import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { hash, randomUUID } from 'crypto';
 import { prisma } from '@/lib/prisma';
+import { TableRowSkeleton } from '../ui/skeletons';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -142,4 +143,37 @@ export async function authenticate(prevState:string | undefined,formData: FormDa
     throw error;
   }
   
+}
+export async function createTask(column: string, title: string){
+  if(!title.trim().length) return;
+  
+  const task = await prisma.tasks.create({
+    data: {
+      title,
+      column
+    }
+  })
+  revalidatePath('/dashboard/kanban');
+  // redirect('/dashboard/kanban');
+  return task
+}
+export async function updateTask(column: string, title: string, id: string){
+  if(!title.trim().length) return;
+
+  await prisma.tasks.update({
+    where: { id },
+    data: {
+      title,
+      column
+    }
+  })
+  revalidatePath('/dashboard/kanban');
+  redirect('/dashboard/kanban');
+}
+export async function deleteTask(id: string){
+  await prisma.tasks.delete({
+    where: { id }
+  })
+  revalidatePath('/dashboard/kanban');
+  redirect('/dashboard/kanban');
 }
