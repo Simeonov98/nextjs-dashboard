@@ -9,6 +9,7 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { prisma } from '@/lib/prisma';
 
 const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
 
@@ -30,7 +31,15 @@ export async function fetchRevenue() {
     throw new Error('Failed to fetch revenue data.');
   }
 }
-
+export async function fetchAllTasks(){
+  try {
+    const data = await prisma.tasks.findMany();
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch tasks.');
+  }
+}
 export async function fetchLatestInvoices() {
   try {
     const data = await sql<LatestInvoiceRaw[]>`
