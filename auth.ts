@@ -4,19 +4,28 @@ import { authConfig } from './auth.config';
 import { z } from 'zod';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-import postgres from 'postgres';
+//import postgres from 'postgres';
+import { prisma } from './lib/prisma';
  
-const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
+//const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
  
-async function getUser(email: string): Promise<User | undefined> {
-  try {
-    const user = await sql<User[]>`SELECT * FROM users WHERE email=${email}`;
-    return user[0];
-  } catch (error) {
-    console.error('Failed to fetch user:', error);
-    throw new Error('Failed to fetch user.');
-  }
+// async function getUser(email: string): Promise<User | undefined> {
+//   try {
+//     const user = await sql<User[]>`SELECT * FROM users WHERE email=${email}`;
+//     return user[0];
+//   } catch (error) {
+//     console.error('Failed to fetch user:', error);
+//     throw new Error('Failed to fetch user.');
+//   }
+// }
+async function getUser(email:string): Promise<User | null> {
+  return prisma.users.findUnique({
+    where: { 
+      email 
+    } 
+  })
 }
+
  
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
