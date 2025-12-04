@@ -1,34 +1,32 @@
 'use server'
 import { prisma } from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@/auth.config';
+import { users } from '@prisma/client';
 
 
-export async function getCurrentUser() {
-  const session = await getServerSession(authConfig);
-  if (!session) throw new Error("Not authenticated");
-  return session.user;
-}
+
 
 export async function fetchAllTasks() {
   return prisma.tasks.findMany();
 }
 
-export async function createTask(title: string, column: string) {
-  const user = await getCurrentUser();
+export async function createTask(title: string, columnId: number, user:users) {
+  // const user = session?.user
+  if (!user) return null;
+  if (!user.id) return null;
   return prisma.tasks.create({
     data: {
       title,
-      column,
+      columnId,
       owner_id: user.id,
     },
   });
 }
 
-export async function updateTask(id: string, column: string, title?: string) {
+export async function updateTask(id: string, columnId: number, title?: string) {
+  console.log(id,columnId,title)
   return prisma.tasks.update({
     where: { id },
-    data: { column, title },
+    data: { columnId, title },
   });
 }
 

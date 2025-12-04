@@ -5,6 +5,7 @@ export type CardsType = {
   id: string;
   title: string;
   column: string;
+  owner_id: string;
 }
 export const Card=({ title, id, column,handleDragStart }: { title: string; id: string; column: string; handleDragStart:Function})=> {
 

@@ -1,12 +1,14 @@
+'use client'
 import { useState } from "react";
 import { createTask } from "@/app/lib/tasks";
 import { CardsType } from "./card";
 import { motion } from "framer-motion";  
 import { FiPlus } from "react-icons/fi";
+import { users } from "@prisma/client";
 
 
 
-export const AddCard =({setCards, column}:{setCards:Function,column:string})=> {
+export const AddCard =({setCards, column,user}:{setCards:Function;column:string;user:users})=> {
     const [text, setText] = useState("");
     const [adding, setAdding] = useState(false);
     
@@ -16,13 +18,15 @@ export const AddCard =({setCards, column}:{setCards:Function,column:string})=> {
         
         if(!text.trim().length) return;
         
-        const createdTask = await createTask(column,text)
+        const createdTask = await createTask(column,text,user)
         if(!createdTask) return;
+        console.log("Bum!!!")
         
         setCards((prevCards: CardsType[]) => [...prevCards, {
           id: createdTask?.id,
           title: text,
-          column
+          column,
+          owner_id:user.id
 
         }]);
         

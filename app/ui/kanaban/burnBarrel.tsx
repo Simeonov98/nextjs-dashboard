@@ -3,13 +3,14 @@ import { CardsType } from "./card";
 import { deleteTask } from "@/app/lib/tasks";
 import { FaFire } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
+import { users } from "@prisma/client";
 
 
 
 
 
 
-export const BurnBarrel=({ setCards }: { setCards: Function }) => {
+export const BurnBarrel=({ setCards,user }: { setCards: Function;user:users }) => {
     const [active, setActive] = useState(false);
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>)=> {
         e.preventDefault();

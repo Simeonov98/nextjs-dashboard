@@ -1,11 +1,11 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { authConfig } from './auth.config';
+import { authConfig } from '../auth.config';
 import { z } from 'zod';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 //import postgres from 'postgres';
-import { prisma } from './lib/prisma';
+import { prisma } from './prisma';
  
 //const sql = postgres(process.env.DATABASE_URL!, { ssl: 'require' });
  
@@ -29,6 +29,14 @@ async function getUser(email:string): Promise<User | null> {
  
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  callbacks:{
+    async session({ session, token}){
+     if (session.user && token.sub){
+      session.user.id = token.sub
+     }
+     return session
+    }
+  },
   providers: [
     Credentials({
       async authorize(credentials) {

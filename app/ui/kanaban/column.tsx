@@ -4,10 +4,11 @@ import { DropIndicator } from './dropIndicator';
 import { CardsType } from './card';
 import { Card } from './card';
 import { AddCard } from './addCard';
+import { users } from '@prisma/client';
 
 
 
-export const Column = ({ title, headingColor, column, cards, setCards }: { title: string; headingColor: string; column: string; cards: CardsType[]; setCards: Function }) =>{
+export const Column = ({ title, headingColor, column, cards, setCards,user }: { title: string; headingColor: string; column: string; cards: CardsType[]; setCards: Function;user:users }) =>{
   const [active, setActive] = useState(false);
   const filteredCards = cards.filter((card) => card.column === column);
   
@@ -111,7 +112,7 @@ export const Column = ({ title, headingColor, column, cards, setCards }: { title
           return <Card key={c.id} {...c} handleDragStart={handleDragStart} headingColor={headingColor} />
         })}
       <DropIndicator beforeId='-1' column={column} />
-      <AddCard setCards={setCards} column={column}/>
+      <AddCard setCards={setCards} column={column} user={user}/>
     </div>
   </div>
   )

@@ -8,21 +8,21 @@ datasource db {
 }
 
 model customers {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name      String @db.VarChar(255)
-  email     String @db.VarChar(255)
-  image_url String @db.VarChar(255)
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String     @db.VarChar(255)
+  email     String     @db.VarChar(255)
+  image_url String     @db.VarChar(255)
   invoices  invoices[]
 }
 
 model invoices {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  customer_id String @db.Uuid
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customer_id String    @db.Uuid
   customer    customers @relation(fields: [customer_id], references: [id])
   slug        String?   @unique
   amount      Int
-  status      String   @db.VarChar(255)
-  date        DateTime @db.Date
+  status      String    @db.VarChar(255)
+  date        DateTime  @db.Date
 }
 
 model revenue {
@@ -31,21 +31,28 @@ model revenue {
 }
 
 model users {
-  id             String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name           String @db.VarChar(255)
-  email          String @unique
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String  @db.VarChar(255)
+  email          String  @unique
   password       String
-  lft            Int 
+  lft            Int
   rgt            Int
   ownedTasks     tasks[] @relation("TaskOwner")
   executingTasks tasks[] @relation("TaskExecutors")
 }
 
 model tasks {
-  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title     String @db.VarChar(255)
-  column    String @db.VarChar(255)
-  owner_id  String @db.Uuid
-  owner     users @relation("TaskOwner",fields: [owner_id], references: [id])
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String  @db.VarChar(255)
+  column    column  @relation("TasksOfColumn", fields: [columnId], references: [id])
+  owner_id  String  @db.Uuid
+  owner     users   @relation("TaskOwner", fields: [owner_id], references: [id])
   executors users[] @relation("TaskExecutors")
+  columnId  Int   @db.Integer
+}
+
+model column {
+  id    Int  @id @default(autoincrement()) 
+  name  String  @db.VarChar(255)
+  tasks tasks[] @relation("TasksOfColumn")
 }
