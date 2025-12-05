@@ -1,0 +1,38 @@
+import NextAuth from "next-auth"
+import z from "zod"
+import Credentials from "next-auth/providers/credentials"
+import { authConfig } from "@/auth.config"
+import { prisma } from "@/lib/prisma"
+import bcrypt from "bcrypt"
+
+async function getUser(email:string){
+    return prisma.users.findUnique({
+        where:{email}
+    })
+}
+
+const handler = NextAuth({
+  ...authConfig,
+  providers:[
+    Credentials({
+        async authorize(credentials){
+            const parsedCredentials = z.
+            object({email: z.string().email(), password: z.string().min(6)})
+            .safeParse(credentials)
+            if(parsedCredentials.success){
+                const {email, password} = parsedCredentials.data;
+                const user = await getUser(email);
+                if (!user) return null;
+                const passwordsMatch = await bcrypt.compare(password, user.password);
+                    
+                    if (passwordsMatch) return user;
+
+            }
+            console.log('Invalid credentials');
+            return null;
+        }
+    })
+  ]
+})
+
+export { handler as GET, handler as POST }

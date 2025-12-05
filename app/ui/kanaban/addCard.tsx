@@ -2,13 +2,14 @@
 import { useState } from "react";
 import { createTask } from "@/app/lib/tasks";
 import { CardsType } from "./card";
-import { motion } from "framer-motion";  
+import { keyframes, motion } from "framer-motion";  
 import { FiPlus } from "react-icons/fi";
 import { users } from "@prisma/client";
+import { title } from "process";
 
 
 
-export const AddCard =({setCards, column,user}:{setCards:Function;column:string;user:users})=> {
+export const AddCard =({setCards, columnId, user,title}:{setCards:Function; columnId:number; user:users; title:string})=> {
     const [text, setText] = useState("");
     const [adding, setAdding] = useState(false);
     
@@ -18,19 +19,25 @@ export const AddCard =({setCards, column,user}:{setCards:Function;column:string;
         
         if(!text.trim().length) return;
         
-        const createdTask = await createTask(column,text,user)
-        if(!createdTask) return;
-        console.log("Bum!!!")
+        // const createdTask = await createTask(column,text,user)
+        const createdTask = await createTask(text,columnId,user)
+        if (!createdTask) {
+          
+          console.error('createTask returned empty result')
+          return;
+        }
+
+        console.log("Bum!!! createTask DID NOT return empty result")
         
         setCards((prevCards: CardsType[]) => [...prevCards, {
           id: createdTask?.id,
           title: text,
-          column,
+          columnId,
           owner_id:user.id
 
         }]);
-        
-        setText("");
+
+        setText(text);
         setAdding(false);
     }
  
