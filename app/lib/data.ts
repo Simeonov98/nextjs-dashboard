@@ -31,6 +31,15 @@ export async function fetchRevenue() {
     throw new Error('Failed to fetch revenue data.');
   }
 }
+export async function fetchAllColumns(){
+  try{
+    const data = await prisma.column.findMany();
+    return data;
+  }catch (error){
+    console.log('Database Error:',error)
+    throw new Error('Failed to fetch columns.')
+  }
+}
 export async function fetchAllTasks(){
   try {
     const data = await prisma.tasks.findMany();
