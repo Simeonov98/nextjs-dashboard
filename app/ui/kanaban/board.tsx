@@ -1,6 +1,6 @@
 import { fetchAllTasks,fetchAllColumns } from "@/app/lib/data";
 import BoardClient from "./BoradClient";
-import { users } from "@prisma/client";
+import { users } from 'prisma/generated/prisma/client';
  
 
 

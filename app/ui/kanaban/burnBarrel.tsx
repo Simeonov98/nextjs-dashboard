@@ -3,7 +3,7 @@ import { CardsType } from "./card";
 import { deleteTask } from "@/app/lib/tasks";
 import { FaFire } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
-import { users } from "@prisma/client";
+import { users } from 'prisma/generated/prisma/client';
 
 
 

@@ -4,7 +4,7 @@ import { DropIndicator } from './dropIndicator';
 import { CardsType } from './card';
 import { Card } from './card';
 import { AddCard } from './addCard';
-import { users } from '@prisma/client';
+import { users } from 'prisma/generated/prisma/client';
 
 
 

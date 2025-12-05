@@ -4,7 +4,7 @@ import { createTask } from "@/app/lib/tasks";
 import { CardsType } from "./card";
 import { keyframes, motion } from "framer-motion";  
 import { FiPlus } from "react-icons/fi";
-import { users } from "@prisma/client";
+import { users } from 'prisma/generated/prisma/client';
 import { title } from "process";
 
 

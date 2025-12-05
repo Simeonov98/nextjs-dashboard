@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CardsType } from './card'
 import { Column } from './column'
 import { BurnBarrel } from './burnBarrel'
-import { column, users } from '@prisma/client'
+import { column, users } from 'prisma/generated/prisma/client'
 
 export default function BoardClient({ initialCards,user,columns }: { initialCards: CardsType[],user:users,columns:column[] }) {
     const [cards, setCards] = useState(initialCards)
