@@ -4,12 +4,9 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
 import { signIn } from '@/app/lib/auth';
-import { AuthError, User } from 'next-auth';
-import { hash, randomUUID } from 'crypto';
+import { AuthError } from 'next-auth';
+import {  randomUUID } from 'crypto';
 import { prisma } from '@/lib/prisma';
-import { TableRowSkeleton } from '../ui/skeletons';
-import { auth } from "@/app/lib/auth"
-
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 
@@ -28,7 +25,7 @@ const CreateInvoice = FormSchema.omit({ id: true, date: true })
 
 export type State = {
   errors?:{
-    customerId?: number[],
+    customerId?: string[],
     amount?: string[],
     status?: string[],
   };
