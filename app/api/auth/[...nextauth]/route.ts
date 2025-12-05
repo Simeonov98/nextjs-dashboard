@@ -1,9 +1,9 @@
-import NextAuth from "next-auth"
-import z from "zod"
-import Credentials from "next-auth/providers/credentials"
-import { authConfig } from "@/auth.config"
-import { prisma } from "@/lib/prisma"
-import bcrypt from "bcrypt"
+import NextAuth from "next-auth";
+import z from "zod";
+import Credentials from "next-auth/providers/credentials";
+import { authConfig } from "@/auth.config";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
 
 async function getUser(email:string){
     return prisma.users.findUnique({
@@ -11,7 +11,7 @@ async function getUser(email:string){
     })
 }
 
-const handler = NextAuth({
+const authHandler = NextAuth({
   ...authConfig,
   providers:[
     Credentials({
@@ -34,5 +34,4 @@ const handler = NextAuth({
     })
   ]
 })
-
-export { handler as GET, handler as POST }
+export const { handlers: { GET, POST } } = authHandler;
