@@ -5,7 +5,6 @@
 import Board from "@/app/ui/kanaban/board";
 import { auth } from "@/app/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { users } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 export default async function KanbanPage() {
