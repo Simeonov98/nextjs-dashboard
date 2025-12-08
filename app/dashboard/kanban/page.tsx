@@ -6,6 +6,7 @@ import Board from "@/app/ui/kanaban/board";
 import { auth } from "@/app/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { userAgent } from "next/server";
 
 export default async function KanbanPage() {
   const session = await auth()
@@ -22,6 +23,11 @@ export default async function KanbanPage() {
   
   return (
     <div className="h-screen w-full bg-neutral-50 text-neutral-500 border rounded-xl">
+      <div className="flex flex-row p-4">
+      <div className="p-4 font-bold border rounded-xl text-blue-500">Kanban Board</div>
+      <p className="p-4 font-bold border rounded-xl text-indigo-500">{fullUser.name}</p>
+      <p className="p-4 font-bold border rounded-xl text-indigo-500">{fullUser.email}</p>
+      </div>
       <Board user={fullUser}/>
     </div>
   );

@@ -56,7 +56,8 @@ export const ModelName = {
   revenue: 'revenue',
   users: 'users',
   tasks: 'tasks',
-  column: 'column'
+  column: 'column',
+  role: 'role'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -110,8 +111,7 @@ export const UsersScalarFieldEnum = {
   name: 'name',
   email: 'email',
   password: 'password',
-  lft: 'lft',
-  rgt: 'rgt'
+  roleId: 'roleId'
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
@@ -133,6 +133,16 @@ export const ColumnScalarFieldEnum = {
 } as const
 
 export type ColumnScalarFieldEnum = (typeof ColumnScalarFieldEnum)[keyof typeof ColumnScalarFieldEnum]
+
+
+export const RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  level: 'level',
+  parentId: 'parentId'
+} as const
+
+export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
 
 
 export const SortOrder = {
