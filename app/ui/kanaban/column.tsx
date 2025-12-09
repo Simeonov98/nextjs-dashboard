@@ -4,25 +4,11 @@ import { DropIndicator } from './dropIndicator';
 import { CardsType } from './card';
 import { Card } from './card';
 import { AddCard } from './addCard';
-import { users } from 'prisma/generated/prisma/client';
+import { users,tasks } from 'prisma/generated/prisma/client';
+import { TaskWithOwner } from './kanbanTypes'
+// Task with included relations returned by fetchAllTasks
 
 
-
-// export const Column = ({
-//   colName,
-//   headingColor,
-//   columnId,
-//   cards,
-//   setCards,
-//   user }: {
-//     colName: string;
-//     headingColor: string;
-//     columnId: number;
-//     cards: CardsType[];
-//     setCards: Function;
-//     user: users
-//   }) => {
-//   const [active, setActive] = useState(false);
 export const Column = ({
   colName,
   columnId,
@@ -32,14 +18,12 @@ export const Column = ({
   user }: {
     colName: string;    
     columnId: number;
-    headingColor: string;
-    cards: CardsType[];
+      headingColor: string;
+      cards: TaskWithOwner[];
     setCards: Function;
     user: users
   }) => {
   const [active, setActive] = useState(false);
-
-
 
   //title==column.name 
   const filteredCards = cards.filter((card) => card.columnId === columnId);
@@ -143,8 +127,12 @@ export const Column = ({
         className={`h-full w-full transition-colors 
         ${active ? "bg-neutral-300/50" : "bg-neutral-300/0"}`}
       >
-        {filteredCards.map((c: CardsType) => {
-          return <Card key={c.id} title={c.title} id={c.id} columnId={c.columnId} handleDragStart={handleDragStart} />
+        {filteredCards.map((c: TaskWithOwner,i) => {
+          const shade = i % 2 === 0 ? `bg-indigo-400` : `bg-violet-400`
+          // prefer the owner's name if the relation was included, otherwise fall back to owner_id
+          const ownerName = c.owner?.name ?? c.owner_id;
+
+          return <Card bgColor={shade} key={c.id} title={c.title} id={c.id} columnId={c.columnId} owner={ownerName} executors={c.executors}handleDragStart={handleDragStart} />
         })}
         <DropIndicator beforeId='-1' columnId={columnId} />
         <AddCard setCards={setCards} columnId={columnId} title={colName} user={user} />

@@ -27,13 +27,11 @@ export type AggregateUsers = {
 }
 
 export type UsersAvgAggregateOutputType = {
-  lft: number | null
-  rgt: number | null
+  roleId: number | null
 }
 
 export type UsersSumAggregateOutputType = {
-  lft: number | null
-  rgt: number | null
+  roleId: number | null
 }
 
 export type UsersMinAggregateOutputType = {
@@ -41,8 +39,7 @@ export type UsersMinAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
-  lft: number | null
-  rgt: number | null
+  roleId: number | null
 }
 
 export type UsersMaxAggregateOutputType = {
@@ -50,8 +47,7 @@ export type UsersMaxAggregateOutputType = {
   name: string | null
   email: string | null
   password: string | null
-  lft: number | null
-  rgt: number | null
+  roleId: number | null
 }
 
 export type UsersCountAggregateOutputType = {
@@ -59,20 +55,17 @@ export type UsersCountAggregateOutputType = {
   name: number
   email: number
   password: number
-  lft: number
-  rgt: number
+  roleId: number
   _all: number
 }
 
 
 export type UsersAvgAggregateInputType = {
-  lft?: true
-  rgt?: true
+  roleId?: true
 }
 
 export type UsersSumAggregateInputType = {
-  lft?: true
-  rgt?: true
+  roleId?: true
 }
 
 export type UsersMinAggregateInputType = {
@@ -80,8 +73,7 @@ export type UsersMinAggregateInputType = {
   name?: true
   email?: true
   password?: true
-  lft?: true
-  rgt?: true
+  roleId?: true
 }
 
 export type UsersMaxAggregateInputType = {
@@ -89,8 +81,7 @@ export type UsersMaxAggregateInputType = {
   name?: true
   email?: true
   password?: true
-  lft?: true
-  rgt?: true
+  roleId?: true
 }
 
 export type UsersCountAggregateInputType = {
@@ -98,8 +89,7 @@ export type UsersCountAggregateInputType = {
   name?: true
   email?: true
   password?: true
-  lft?: true
-  rgt?: true
+  roleId?: true
   _all?: true
 }
 
@@ -194,8 +184,7 @@ export type UsersGroupByOutputType = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
+  roleId: number
   _count: UsersCountAggregateOutputType | null
   _avg: UsersAvgAggregateOutputType | null
   _sum: UsersSumAggregateOutputType | null
@@ -226,10 +215,10 @@ export type usersWhereInput = {
   name?: Prisma.StringFilter<"users"> | string
   email?: Prisma.StringFilter<"users"> | string
   password?: Prisma.StringFilter<"users"> | string
-  lft?: Prisma.IntFilter<"users"> | number
-  rgt?: Prisma.IntFilter<"users"> | number
+  roleId?: Prisma.IntFilter<"users"> | number
   ownedTasks?: Prisma.TasksListRelationFilter
   executingTasks?: Prisma.TasksListRelationFilter
+  role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.roleWhereInput>
 }
 
 export type usersOrderByWithRelationInput = {
@@ -237,10 +226,10 @@ export type usersOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
   ownedTasks?: Prisma.tasksOrderByRelationAggregateInput
   executingTasks?: Prisma.tasksOrderByRelationAggregateInput
+  role?: Prisma.roleOrderByWithRelationInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -251,10 +240,10 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.usersWhereInput | Prisma.usersWhereInput[]
   name?: Prisma.StringFilter<"users"> | string
   password?: Prisma.StringFilter<"users"> | string
-  lft?: Prisma.IntFilter<"users"> | number
-  rgt?: Prisma.IntFilter<"users"> | number
+  roleId?: Prisma.IntFilter<"users"> | number
   ownedTasks?: Prisma.TasksListRelationFilter
   executingTasks?: Prisma.TasksListRelationFilter
+  role?: Prisma.XOR<Prisma.RoleScalarRelationFilter, Prisma.roleWhereInput>
 }, "id" | "email">
 
 export type usersOrderByWithAggregationInput = {
@@ -262,8 +251,7 @@ export type usersOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
   _count?: Prisma.usersCountOrderByAggregateInput
   _avg?: Prisma.usersAvgOrderByAggregateInput
   _max?: Prisma.usersMaxOrderByAggregateInput
@@ -279,8 +267,7 @@ export type usersScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"users"> | string
   email?: Prisma.StringWithAggregatesFilter<"users"> | string
   password?: Prisma.StringWithAggregatesFilter<"users"> | string
-  lft?: Prisma.IntWithAggregatesFilter<"users"> | number
-  rgt?: Prisma.IntWithAggregatesFilter<"users"> | number
+  roleId?: Prisma.IntWithAggregatesFilter<"users"> | number
 }
 
 export type usersCreateInput = {
@@ -288,10 +275,9 @@ export type usersCreateInput = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
   ownedTasks?: Prisma.tasksCreateNestedManyWithoutOwnerInput
   executingTasks?: Prisma.tasksCreateNestedManyWithoutExecutorsInput
+  role: Prisma.roleCreateNestedOneWithoutUsersInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -299,8 +285,7 @@ export type usersUncheckedCreateInput = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
+  roleId: number
   ownedTasks?: Prisma.tasksUncheckedCreateNestedManyWithoutOwnerInput
   executingTasks?: Prisma.tasksUncheckedCreateNestedManyWithoutExecutorsInput
 }
@@ -310,10 +295,9 @@ export type usersUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
   ownedTasks?: Prisma.tasksUpdateManyWithoutOwnerNestedInput
   executingTasks?: Prisma.tasksUpdateManyWithoutExecutorsNestedInput
+  role?: Prisma.roleUpdateOneRequiredWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -321,8 +305,7 @@ export type usersUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
+  roleId?: Prisma.IntFieldUpdateOperationsInput | number
   ownedTasks?: Prisma.tasksUncheckedUpdateManyWithoutOwnerNestedInput
   executingTasks?: Prisma.tasksUncheckedUpdateManyWithoutExecutorsNestedInput
 }
@@ -332,8 +315,7 @@ export type usersCreateManyInput = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
+  roleId: number
 }
 
 export type usersUpdateManyMutationInput = {
@@ -341,8 +323,6 @@ export type usersUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type usersUncheckedUpdateManyInput = {
@@ -350,8 +330,7 @@ export type usersUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
+  roleId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type usersCountOrderByAggregateInput = {
@@ -359,13 +338,11 @@ export type usersCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
 }
 
 export type usersAvgOrderByAggregateInput = {
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
 }
 
 export type usersMaxOrderByAggregateInput = {
@@ -373,8 +350,7 @@ export type usersMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
 }
 
 export type usersMinOrderByAggregateInput = {
@@ -382,13 +358,11 @@ export type usersMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
 }
 
 export type usersSumOrderByAggregateInput = {
-  lft?: Prisma.SortOrder
-  rgt?: Prisma.SortOrder
+  roleId?: Prisma.SortOrder
 }
 
 export type UsersScalarRelationFilter = {
@@ -458,14 +432,55 @@ export type usersUncheckedUpdateManyWithoutExecutingTasksNestedInput = {
   deleteMany?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[]
 }
 
+export type usersCreateNestedManyWithoutRoleInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutRoleInput, Prisma.usersUncheckedCreateWithoutRoleInput> | Prisma.usersCreateWithoutRoleInput[] | Prisma.usersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutRoleInput | Prisma.usersCreateOrConnectWithoutRoleInput[]
+  createMany?: Prisma.usersCreateManyRoleInputEnvelope
+  connect?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+}
+
+export type usersUncheckedCreateNestedManyWithoutRoleInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutRoleInput, Prisma.usersUncheckedCreateWithoutRoleInput> | Prisma.usersCreateWithoutRoleInput[] | Prisma.usersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutRoleInput | Prisma.usersCreateOrConnectWithoutRoleInput[]
+  createMany?: Prisma.usersCreateManyRoleInputEnvelope
+  connect?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+}
+
+export type usersUpdateManyWithoutRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutRoleInput, Prisma.usersUncheckedCreateWithoutRoleInput> | Prisma.usersCreateWithoutRoleInput[] | Prisma.usersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutRoleInput | Prisma.usersCreateOrConnectWithoutRoleInput[]
+  upsert?: Prisma.usersUpsertWithWhereUniqueWithoutRoleInput | Prisma.usersUpsertWithWhereUniqueWithoutRoleInput[]
+  createMany?: Prisma.usersCreateManyRoleInputEnvelope
+  set?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  disconnect?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  delete?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  connect?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  update?: Prisma.usersUpdateWithWhereUniqueWithoutRoleInput | Prisma.usersUpdateWithWhereUniqueWithoutRoleInput[]
+  updateMany?: Prisma.usersUpdateManyWithWhereWithoutRoleInput | Prisma.usersUpdateManyWithWhereWithoutRoleInput[]
+  deleteMany?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[]
+}
+
+export type usersUncheckedUpdateManyWithoutRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutRoleInput, Prisma.usersUncheckedCreateWithoutRoleInput> | Prisma.usersCreateWithoutRoleInput[] | Prisma.usersUncheckedCreateWithoutRoleInput[]
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutRoleInput | Prisma.usersCreateOrConnectWithoutRoleInput[]
+  upsert?: Prisma.usersUpsertWithWhereUniqueWithoutRoleInput | Prisma.usersUpsertWithWhereUniqueWithoutRoleInput[]
+  createMany?: Prisma.usersCreateManyRoleInputEnvelope
+  set?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  disconnect?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  delete?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  connect?: Prisma.usersWhereUniqueInput | Prisma.usersWhereUniqueInput[]
+  update?: Prisma.usersUpdateWithWhereUniqueWithoutRoleInput | Prisma.usersUpdateWithWhereUniqueWithoutRoleInput[]
+  updateMany?: Prisma.usersUpdateManyWithWhereWithoutRoleInput | Prisma.usersUpdateManyWithWhereWithoutRoleInput[]
+  deleteMany?: Prisma.usersScalarWhereInput | Prisma.usersScalarWhereInput[]
+}
+
 export type usersCreateWithoutOwnedTasksInput = {
   id?: string
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
   executingTasks?: Prisma.tasksCreateNestedManyWithoutExecutorsInput
+  role: Prisma.roleCreateNestedOneWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutOwnedTasksInput = {
@@ -473,8 +488,7 @@ export type usersUncheckedCreateWithoutOwnedTasksInput = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
+  roleId: number
   executingTasks?: Prisma.tasksUncheckedCreateNestedManyWithoutExecutorsInput
 }
 
@@ -488,9 +502,8 @@ export type usersCreateWithoutExecutingTasksInput = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
   ownedTasks?: Prisma.tasksCreateNestedManyWithoutOwnerInput
+  role: Prisma.roleCreateNestedOneWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutExecutingTasksInput = {
@@ -498,8 +511,7 @@ export type usersUncheckedCreateWithoutExecutingTasksInput = {
   name: string
   email: string
   password: string
-  lft: number
-  rgt: number
+  roleId: number
   ownedTasks?: Prisma.tasksUncheckedCreateNestedManyWithoutOwnerInput
 }
 
@@ -524,9 +536,8 @@ export type usersUpdateWithoutOwnedTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
   executingTasks?: Prisma.tasksUpdateManyWithoutExecutorsNestedInput
+  role?: Prisma.roleUpdateOneRequiredWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutOwnedTasksInput = {
@@ -534,8 +545,7 @@ export type usersUncheckedUpdateWithoutOwnedTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
+  roleId?: Prisma.IntFieldUpdateOperationsInput | number
   executingTasks?: Prisma.tasksUncheckedUpdateManyWithoutExecutorsNestedInput
 }
 
@@ -563,8 +573,51 @@ export type usersScalarWhereInput = {
   name?: Prisma.StringFilter<"users"> | string
   email?: Prisma.StringFilter<"users"> | string
   password?: Prisma.StringFilter<"users"> | string
-  lft?: Prisma.IntFilter<"users"> | number
-  rgt?: Prisma.IntFilter<"users"> | number
+  roleId?: Prisma.IntFilter<"users"> | number
+}
+
+export type usersCreateWithoutRoleInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  ownedTasks?: Prisma.tasksCreateNestedManyWithoutOwnerInput
+  executingTasks?: Prisma.tasksCreateNestedManyWithoutExecutorsInput
+}
+
+export type usersUncheckedCreateWithoutRoleInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+  ownedTasks?: Prisma.tasksUncheckedCreateNestedManyWithoutOwnerInput
+  executingTasks?: Prisma.tasksUncheckedCreateNestedManyWithoutExecutorsInput
+}
+
+export type usersCreateOrConnectWithoutRoleInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutRoleInput, Prisma.usersUncheckedCreateWithoutRoleInput>
+}
+
+export type usersCreateManyRoleInputEnvelope = {
+  data: Prisma.usersCreateManyRoleInput | Prisma.usersCreateManyRoleInput[]
+  skipDuplicates?: boolean
+}
+
+export type usersUpsertWithWhereUniqueWithoutRoleInput = {
+  where: Prisma.usersWhereUniqueInput
+  update: Prisma.XOR<Prisma.usersUpdateWithoutRoleInput, Prisma.usersUncheckedUpdateWithoutRoleInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutRoleInput, Prisma.usersUncheckedCreateWithoutRoleInput>
+}
+
+export type usersUpdateWithWhereUniqueWithoutRoleInput = {
+  where: Prisma.usersWhereUniqueInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutRoleInput, Prisma.usersUncheckedUpdateWithoutRoleInput>
+}
+
+export type usersUpdateManyWithWhereWithoutRoleInput = {
+  where: Prisma.usersScalarWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateManyMutationInput, Prisma.usersUncheckedUpdateManyWithoutRoleInput>
 }
 
 export type usersUpdateWithoutExecutingTasksInput = {
@@ -572,9 +625,8 @@ export type usersUpdateWithoutExecutingTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
   ownedTasks?: Prisma.tasksUpdateManyWithoutOwnerNestedInput
+  role?: Prisma.roleUpdateOneRequiredWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutExecutingTasksInput = {
@@ -582,8 +634,7 @@ export type usersUncheckedUpdateWithoutExecutingTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
+  roleId?: Prisma.IntFieldUpdateOperationsInput | number
   ownedTasks?: Prisma.tasksUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
@@ -592,8 +643,39 @@ export type usersUncheckedUpdateManyWithoutExecutingTasksInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
-  lft?: Prisma.IntFieldUpdateOperationsInput | number
-  rgt?: Prisma.IntFieldUpdateOperationsInput | number
+  roleId?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type usersCreateManyRoleInput = {
+  id?: string
+  name: string
+  email: string
+  password: string
+}
+
+export type usersUpdateWithoutRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  ownedTasks?: Prisma.tasksUpdateManyWithoutOwnerNestedInput
+  executingTasks?: Prisma.tasksUpdateManyWithoutExecutorsNestedInput
+}
+
+export type usersUncheckedUpdateWithoutRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  ownedTasks?: Prisma.tasksUncheckedUpdateManyWithoutOwnerNestedInput
+  executingTasks?: Prisma.tasksUncheckedUpdateManyWithoutExecutorsNestedInput
+}
+
+export type usersUncheckedUpdateManyWithoutRoleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -641,10 +723,10 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name?: boolean
   email?: boolean
   password?: boolean
-  lft?: boolean
-  rgt?: boolean
+  roleId?: boolean
   ownedTasks?: boolean | Prisma.users$ownedTasksArgs<ExtArgs>
   executingTasks?: boolean | Prisma.users$executingTasksArgs<ExtArgs>
+  role?: boolean | Prisma.roleDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -653,8 +735,8 @@ export type usersSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   email?: boolean
   password?: boolean
-  lft?: boolean
-  rgt?: boolean
+  roleId?: boolean
+  role?: boolean | Prisma.roleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -662,8 +744,8 @@ export type usersSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   email?: boolean
   password?: boolean
-  lft?: boolean
-  rgt?: boolean
+  roleId?: boolean
+  role?: boolean | Prisma.roleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
 export type usersSelectScalar = {
@@ -671,32 +753,36 @@ export type usersSelectScalar = {
   name?: boolean
   email?: boolean
   password?: boolean
-  lft?: boolean
-  rgt?: boolean
+  roleId?: boolean
 }
 
-export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "lft" | "rgt", ExtArgs["result"]["users"]>
+export type usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "password" | "roleId", ExtArgs["result"]["users"]>
 export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ownedTasks?: boolean | Prisma.users$ownedTasksArgs<ExtArgs>
   executingTasks?: boolean | Prisma.users$executingTasksArgs<ExtArgs>
+  role?: boolean | Prisma.roleDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type usersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  role?: boolean | Prisma.roleDefaultArgs<ExtArgs>
+}
+export type usersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  role?: boolean | Prisma.roleDefaultArgs<ExtArgs>
+}
 
 export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "users"
   objects: {
     ownedTasks: Prisma.$tasksPayload<ExtArgs>[]
     executingTasks: Prisma.$tasksPayload<ExtArgs>[]
+    role: Prisma.$rolePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     email: string
     password: string
-    lft: number
-    rgt: number
+    roleId: number
   }, ExtArgs["result"]["users"]>
   composites: {}
 }
@@ -1093,6 +1179,7 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   ownedTasks<T extends Prisma.users$ownedTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$ownedTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tasksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   executingTasks<T extends Prisma.users$executingTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$executingTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tasksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  role<T extends Prisma.roleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.roleDefaultArgs<ExtArgs>>): Prisma.Prisma__roleClient<runtime.Types.Result.GetResult<Prisma.$rolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1126,8 +1213,7 @@ export interface usersFieldRefs {
   readonly name: Prisma.FieldRef<"users", 'String'>
   readonly email: Prisma.FieldRef<"users", 'String'>
   readonly password: Prisma.FieldRef<"users", 'String'>
-  readonly lft: Prisma.FieldRef<"users", 'Int'>
-  readonly rgt: Prisma.FieldRef<"users", 'Int'>
+  readonly roleId: Prisma.FieldRef<"users", 'Int'>
 }
     
 
@@ -1377,6 +1463,10 @@ export type usersCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.usersCreateManyInput | Prisma.usersCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1447,6 +1537,10 @@ export type usersUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.usersIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

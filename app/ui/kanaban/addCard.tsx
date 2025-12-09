@@ -29,14 +29,14 @@ export const AddCard =({setCards, columnId, user,title}:{setCards:Function; colu
 
         console.log("Bum!!! createTask DID NOT return empty result")
         
-        setCards((prevCards: CardsType[]) => [...prevCards, {
-          id: createdTask?.id,
-          title: text,
-          columnId,
-          owner_id:user.id
+        // setCards((prevCards: CardsType[]) => [...prevCards, {
+        //   id: createdTask?.id,
+        //   title: text,
+        //   columnId,
+        //   owner_id:user.id
 
-        }]);
-
+        // }]);
+        setCards((prevCards: CardsType[]) => [...prevCards, createdTask]);
         setText(text);
         setAdding(false);
     }
@@ -55,13 +55,13 @@ export const AddCard =({setCards, columnId, user,title}:{setCards:Function; colu
                 <div className="mt-1.5 flex items-center justify-end gap-1.5">
             <button
               onClick={() => setAdding(false)}
-              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
             >
               Close
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-emerald-200"
             >
               <span>Add</span>
               <FiPlus />
@@ -72,7 +72,7 @@ export const AddCard =({setCards, columnId, user,title}:{setCards:Function; colu
         <motion.button
           layout
           onClick={() => setAdding(true)}
-          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
         >
           <span>Add card</span>
           <FiPlus />

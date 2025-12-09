@@ -47,3 +47,8 @@ export type tasks = Prisma.tasksModel
  * 
  */
 export type column = Prisma.columnModel
+/**
+ * Model role
+ * 
+ */
+export type role = Prisma.roleModel

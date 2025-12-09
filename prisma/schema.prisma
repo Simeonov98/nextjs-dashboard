@@ -27,8 +27,8 @@ datasource db {
   }
 
   model revenue {
-    month   String @unique @db.VarChar(4)
-    revenue Int
+    month     String @unique @db.VarChar(4)
+    revenue   Int
   }
 
   model users {
@@ -36,10 +36,10 @@ datasource db {
     name           String  @db.VarChar(255)
     email          String  @unique
     password       String
-    lft            Int
-    rgt            Int
     ownedTasks     tasks[] @relation("TaskOwner")
     executingTasks tasks[] @relation("TaskExecutors")
+    roleId         Int     @db.Integer
+    role           role    @relation(fields: [roleId], references: [id])
   }
 
   model tasks {
@@ -53,7 +53,16 @@ datasource db {
   }
 
   model column {
-    id    Int  @id @default(autoincrement()) 
-    name  String  @db.VarChar(255)
-    tasks tasks[] @relation("TasksOfColumn")
+    id        Int  @id @default(autoincrement()) 
+    name      String  @db.VarChar(255)
+    tasks     tasks[] @relation("TasksOfColumn")
+  }
+  model role {
+    id        Int    @id @default(autoincrement())
+    name      String @db.VarChar(255)
+    level     Int
+    parentId  Int?
+    parent    role? @relation("roleHeirarchy", fields: [parentId], references: [id])
+    children  role[] @relation("roleHeirarchy")
+    users     users[]
   }

@@ -139,13 +139,35 @@ async function main() {
   // Seed Users
   // ------------------------------
   const asdasdHashed = await bcrypt.hash('asdasd', 10);
+
+  const admin = await prisma.role.create({
+    data: {
+      name: "Admin",
+      level: 1,
+    },
+  })
+
+  const manager = await prisma.role.create({
+    data: {
+      name: "Manager",
+      level: 2,
+      parentId: admin.id,
+    },
+  })
+
+  const employee = await prisma.role.create({
+    data: {
+      name: "Employee",
+      level: 3,
+      parentId: manager.id,
+    },
+  });
   const user1 = await prisma.users.create({
     data: {
       name: "Dourtchev CEO",
       email: "ceo@mail.com",
       password: asdasdHashed,
-      lft: 1,
-      rgt: 1000,
+      roleId: admin.id,
     },
   });
 
@@ -154,8 +176,7 @@ async function main() {
       name: "Stas",
       email: "rnd@mail.com",
       password: asdasdHashed,
-      lft: 2,
-      rgt: 100,
+      roleId: manager.id,
     },
   });
   const user3 = await prisma.users.create({
@@ -163,8 +184,7 @@ async function main() {
       name: "Simeon",
       email: "dev@mail.com",
       password: asdasdHashed,
-      lft: 101,
-      rgt: 102,
+      roleId: employee.id,
     },
   });
 

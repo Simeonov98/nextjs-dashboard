@@ -1,13 +1,13 @@
-import { fetchAllTasks,fetchAllColumns } from "@/app/lib/data";
+import { fetchAllColumns } from "@/app/lib/data";
+import { fetchAllTasks } from "@/app/lib/tasks";
 import BoardClient from "./BoradClient";
-import { users } from 'prisma/generated/prisma/client';
- 
+import { column, users } from 'prisma/generated/prisma/client';
 
 
-export default async function Board({user}:{user:users}) {
-  const tasks=await fetchAllTasks()
-  const columns=await fetchAllColumns()
+export default async function Board({ user }: { user: users }) {
+  // fetch tasks for the user (fetchAllTasks expects a user id)
+  const tasks = await fetchAllTasks(user.id);
+  const columns = await fetchAllColumns();
 
-  return <BoardClient initialCards={tasks} columns={columns} user={user}/>
-  
+  return <BoardClient initialCards={tasks} columns={columns} user={user} />;
 }
