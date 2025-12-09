@@ -2,13 +2,39 @@
 import { prisma } from '@/lib/prisma';
 import { users } from 'prisma/generated/prisma/client';
 import { revalidatePath } from 'next/cache';
+import { userAgent } from 'next/server';
 
 
 
 
-export async function fetchAllTasks() {
-  return prisma.tasks.findMany();
-}
+export async function fetchAllTasks(userId: string) {
+  const user = await prisma.users.findUnique({
+    where: { id: userId},
+    include: { role: true }
+  })
+  if (!user) throw new Error('User not found')
+  return prisma.tasks.findMany({
+    where: {
+      owner: {
+        role: {
+          level: {
+            gte: user.role.level,
+          },
+        },
+      },
+    },
+    include: {
+      owner: { 
+        include: {
+          role: true,
+        }
+      },
+      column: true,
+      executors: true,
+    }
+  })
+
+  }
 
 export async function createTask(title: string, columnId: number, user: users) {
   // const user = session?.user
@@ -24,10 +50,11 @@ export async function createTask(title: string, columnId: number, user: users) {
   console.log(`createTask Called with:1)title:${title} 2)columnId:${columnId} 3)user.id:${user.id}`)
   try{
     const result = await prisma.tasks.create({
-      data:{
-        title,
-        columnId,
-        owner_id: user.id
+      data:{ title, columnId, owner_id: user.id },
+      include:{
+        owner: true,
+        column: true,
+        executors: true,
       }
     })
     console.log(`Create task is successful: ${JSON.stringify(result, null, 4)}`)
