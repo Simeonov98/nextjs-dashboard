@@ -36,7 +36,7 @@ export async function fetchAllTasks(userId: string) {
 
   }
 
-export async function createTask(title: string, columnId: number, user: users) {
+export async function createTask(title: string, columnId: number, user: users, executorsIds?: string[]) {
   // const user = session?.user
   if (!user) {
     console.error('createTask::ERROR: No user');
@@ -46,11 +46,26 @@ export async function createTask(title: string, columnId: number, user: users) {
     console.error('createTask::ERROR: No user ID');
     return null;
   }
+  const assignedExecutors = executorsIds?.length ? executorsIds : [user.id];
+  
+  console.log(
+    `createTask Called with: 
+    1) title: ${title} 
+    2) columnId: ${columnId} 
+    3) owner: ${user.id}
+    4) executors: ${assignedExecutors}`
+  );
 
-  console.log(`createTask Called with:1)title:${title} 2)columnId:${columnId} 3)user.id:${user.id}`)
   try{
     const result = await prisma.tasks.create({
-      data:{ title, columnId, owner_id: user.id },
+      data:{ 
+        title,
+        columnId,
+        owner_id: user.id,
+        executors: {
+          connect: assignedExecutors.map((id) => ({ id })),
+        },
+      },
       include:{
         owner: true,
         column: true,

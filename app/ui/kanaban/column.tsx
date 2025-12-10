@@ -15,13 +15,15 @@ export const Column = ({
   headingColor,
   cards,
   setCards,
-  user }: {
+  user,
+  children }: {
     colName: string;    
     columnId: number;
       headingColor: string;
       cards: TaskWithOwner[];
     setCards: Function;
-    user: users
+    user: users;
+    children: users[]
   }) => {
   const [active, setActive] = useState(false);
 
@@ -135,7 +137,7 @@ export const Column = ({
           return <Card bgColor={shade} key={c.id} title={c.title} id={c.id} columnId={c.columnId} owner={ownerName} executors={c.executors}handleDragStart={handleDragStart} />
         })}
         <DropIndicator beforeId='-1' columnId={columnId} />
-        <AddCard setCards={setCards} columnId={columnId} title={colName} user={user} />
+        <AddCard setCards={setCards} columnId={columnId} title={colName} user={user} children={children}/>
       </div>
     </div>
   )
