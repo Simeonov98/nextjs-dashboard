@@ -9,32 +9,50 @@ import { userAgent } from 'next/server';
 
 export async function fetchAllTasks(userId: string) {
   const user = await prisma.users.findUnique({
-    where: { id: userId},
+    where: { id: userId },
     include: { role: true }
   })
   if (!user) throw new Error('User not found')
-  return prisma.tasks.findMany({
-    where: {
-      owner: {
-        role: {
-          level: {
-            gte: user.role.level,
+    // if a user's role is higher than employee show the tasks of all users that are his subordinates
+  if (user.role.level < 3) {
+    return prisma.tasks.findMany({
+      where: {
+        owner: {
+          role: {
+            level: {
+              gte: user.role.level,
+            },
           },
         },
       },
-    },
-    include: {
-      owner: { 
-        include: {
-          role: true,
-        }
+      include: {
+        owner: {
+          include: {
+            role: true,
+          }
+        },
+        column: true,
+        executors: true,
+      }
+    })
+  } else {            // else just show the tasks assigned to the user
+    return prisma.tasks.findMany({
+      where: {
+        executors: {
+          some: {
+            id: userId, // <- the ID of the user you're checking
+          },
+        },
       },
-      column: true,
-      executors: true,
-    }
-  })
+      include: {
+        owner: true,
+        executors: true,
+        column: true,
+      },
+    });
 
   }
+}
 
 export async function createTask(title: string, columnId: number, user: users, executorsIds?: string[]) {
   // const user = session?.user
@@ -47,7 +65,7 @@ export async function createTask(title: string, columnId: number, user: users, e
     return null;
   }
   const assignedExecutors = executorsIds?.length ? executorsIds : [user.id];
-  
+
   console.log(
     `createTask Called with: 
     1) title: ${title} 
@@ -56,9 +74,9 @@ export async function createTask(title: string, columnId: number, user: users, e
     4) executors: ${assignedExecutors}`
   );
 
-  try{
+  try {
     const result = await prisma.tasks.create({
-      data:{ 
+      data: {
         title,
         columnId,
         owner_id: user.id,
@@ -66,7 +84,7 @@ export async function createTask(title: string, columnId: number, user: users, e
           connect: assignedExecutors.map((id) => ({ id })),
         },
       },
-      include:{
+      include: {
         owner: true,
         column: true,
         executors: true,
@@ -74,12 +92,12 @@ export async function createTask(title: string, columnId: number, user: users, e
     })
     console.log(`Create task is successful: ${JSON.stringify(result, null, 4)}`)
     return result
-  } catch (error){
+  } catch (error) {
     console.log(`Error in update task:${error}`)
     // throw new Error()
     return null;
   }
-  
+
   // return prisma.tasks.create({
   //   data: {
   //     title,

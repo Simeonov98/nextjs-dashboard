@@ -32,8 +32,9 @@ export const Card = ({ bgColor,title, id, columnId, owner, executors, handleDrag
             <p className="text-sm text-white">Owner: {owner ?? ''}</p>
           </div>
           <div className={`pl-2`}>
+            <p className="text-sm text-white"> Executors:</p>
             {executors?.map((executor: users) =>
-              <p key={executor.id} className="text-sm text-white">Executor: {executor.name}</p>
+              <p key={executor.id} className="text-sm text-white">{executor.name}</p>
             )}
           </div>
         </div>
