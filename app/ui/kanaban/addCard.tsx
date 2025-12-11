@@ -40,68 +40,58 @@ export const AddCard = ({ setCards, columnId, user, title, children }: { setCard
     setSelectedExecutors(values);
   };
 
-  const ShowExecutors = () => {
-
-    if (user.roleId < 3) {
-      return (
-              <div className={`grid grid-cols-2 grid-rows-2`}>
-            <textarea
-              onChange={(e) => setText(e.target.value)}
-              autoFocus
-              placeholder="Add new Task..."
-              className="row-span-2 w-full rounded border border-violet-400 bg-violet400/20 p-3 text-sm text-neutral-450 placeholder-violet-300 focus:outline-0"
-            />
-
-            <div className="pl-2">
-              <select
-                multiple
-                className="w-full rounded border p-2 text-sm bg-white"
-                value={selectedExecutors}
-                onChange={handleSelectedExecutors}
-              >
-                {children.map((ex) => (
-                  <option key={ex.id} value={ex.id}>
-                    {ex.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-      )
-    } else {
-      return (
-         <textarea
-              onChange={(e) => setText(e.target.value)}
-              autoFocus
-              placeholder="Add new Task..."
-              className="row-span-2 w-full rounded border border-violet-400 bg-violet400/20 p-3 text-sm text-neutral-450 placeholder-violet-300 focus:outline-0"
-            />
-
-      )
-    }
-  }
-
 
   return (
     <>
       {adding ? (
         <motion.form layout onSubmit={handleSubmit} >
-      
-          <ShowExecutors/>
-          <div className="mt-1.5 flex items-center justify-end gap-1.5">
-            <button
-              onClick={() => setAdding(false)}
-              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
-            >
-              Close
-            </button>
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-emerald-200"
-            >
-              <span>Add</span>
-              <FiPlus />
-            </button>
+          <div className='wrapper'>
+            {children.length ? (
+              <div className="grid grid-cols-2 grid-rows-2">
+                <textarea
+                  onChange={(e) => setText(e.target.value)}
+                  autoFocus
+                  placeholder="Add new Task..."
+                  className="row-span-2 w-full rounded border border-violet-400 bg-violet400/20 p-3 text-sm text-neutral-450 placeholder-violet-300 focus:outline-0"
+                />
+                <div className="pl-2">
+                  <select
+                    multiple
+                    className="w-full rounded border p-2 text-sm bg-white"
+                    value={selectedExecutors}
+                    onChange={handleSelectedExecutors}
+                  >
+                    {children.map((ex) => (
+                      <option key={ex.id} value={ex.id}>
+                        {ex.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            ) : (
+              <textarea
+                onChange={(e) => setText(e.target.value)}
+                autoFocus
+                placeholder="Add new Task..."
+                className="row-span-2 w-full rounded border border-violet-400 bg-violet400/20 p-3 text-sm text-neutral-450 placeholder-violet-300 focus:outline-0"
+              />
+            )}
+            <div className="mt-1.5 flex items-center justify-end gap-1.5">
+              <button
+                onClick={() => setAdding(false)}
+                className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-emerald-200"
+              >
+                <span>Add</span>
+                <FiPlus />
+              </button>
+            </div>
           </div>
         </motion.form>
       ) : (
