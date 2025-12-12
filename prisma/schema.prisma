@@ -57,6 +57,7 @@ datasource db {
     name      String  @db.VarChar(255)
     tasks     tasks[] @relation("TasksOfColumn")
   }
+  // roles should be created in such a way to represent the different departments
   model role {
     id        Int    @id @default(autoincrement())
     name      String @db.VarChar(255)

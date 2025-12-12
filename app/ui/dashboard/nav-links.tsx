@@ -4,6 +4,7 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
   TableCellsIcon,
+  UserPlusIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -27,6 +28,11 @@ const links = [
     name: 'Kanban',
     href: '/dashboard/kanban',
     icon: TableCellsIcon
+  },
+  {
+    name: 'Add User',
+    href: '/dashboard/adduser',
+    icon: UserPlusIcon
   }
 ];
 
