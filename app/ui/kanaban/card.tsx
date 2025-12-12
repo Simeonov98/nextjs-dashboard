@@ -8,7 +8,7 @@ export type CardsType = {
   title: string;
   columnId: number;
   owner_id: string;
-  // when owner relation is included, it may be present as an object
+  
   owner?: { name?: string } | null;
 }
 export const Card = ({ bgColor,title, id, columnId, owner, executors, handleDragStart }:
