@@ -3,8 +3,9 @@
 import { role, users } from 'prisma/generated/prisma/client';
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { createUser } from '@/app/lib/userActions';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useActionState } from 'react';
 export default function AddUserForm({ owner, roles, allUsers }: { owner: users; roles: role[], allUsers: users[] }) {
+    const [state,formAction]= useActionState(createUser,{success: false})
     const [selectedRoleId, setSelectedRoleId] = useState<number>()
     const [managerFocused, setManagerFocused] = useState(false);
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -32,7 +33,7 @@ export default function AddUserForm({ owner, roles, allUsers }: { owner: users; 
     };
     return (
         
-        <form action={createUser}>
+        <form action={formAction}>
             <div className='relative w-full h-full bg-neutral-50 border rounded border-xl'>
                 <div className='flex flex-col-2 w-90'>
                     {/* Left */}
@@ -42,14 +43,21 @@ export default function AddUserForm({ owner, roles, allUsers }: { owner: users; 
                             <label htmlFor='employeeName' className='mb-1 text-sm'>
                                 Employee name:
                             </label>
-                            <input id='employeeName' className='border rounded-md p-2 outline-2' required placeholder='Add first name' />
+                            <input id='employeeName' name='name' className='border rounded-md p-2 outline-2' required placeholder='Add first name' />
                         </div>
                         {/* Email */}
                         <div className='flex flex-col m-4'>
                             <label htmlFor='employeeEmail' className='mb-1 text-sm'>
                                 Employee email:
                             </label>
-                            <input id='employeeEmail' className='border rounded-md p-2 outline-2' required placeholder='Add email' />
+                            <input id='employeeEmail' name='email' type='email' className='border rounded-md p-2 outline-2' required placeholder='Add email' />
+                        </div>
+                        {/* Password */}
+                        <div className='flex flex-col m-4'>
+                            <label htmlFor='employeePassword' className='mb-1 text-sm'>
+                                Employee password:
+                            </label>
+                            <input id='employeePassword' name='password' type='password' className='border rounded-md p-2 outline-2' required placeholder='Set password (min 6 chars)' />
                         </div>
                         {/* Role selection */}
                         <div className='flex flex-col m-4'>
@@ -58,6 +66,7 @@ export default function AddUserForm({ owner, roles, allUsers }: { owner: users; 
                             </label>
                                 <select
                                     id='employeeRole'
+                                    name='roleId'
                                     className='border rounded-md p-2 outline-2'
                                     defaultValue=''
                                     required
@@ -103,6 +112,18 @@ export default function AddUserForm({ owner, roles, allUsers }: { owner: users; 
                             >
                                 Add User
                             </button>
+                            {state?.error && (
+                                <div className='text-red-500'>
+                                    {typeof state.error === 'string'
+                                        ? state.error
+                                        : state.error?.email
+                                        ? Array.isArray(state.error.email)
+                                            ? state.error.email.join(' ')
+                                            : String(state.error.email)
+                                        : JSON.stringify(state.error)}
+                                </div>
+                            )}
+                            {state?.success && <div className='text-green-500'>User created!</div>}
                         </div>
                     </div>
                     {/* RIght Side (Avatar) */}
