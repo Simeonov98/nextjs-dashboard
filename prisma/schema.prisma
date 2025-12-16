@@ -8,62 +8,65 @@ datasource db {
   // url      = env("DATABASE_URL")
 }
 
-  model customers {
-    id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name      String     @db.VarChar(255)
-    email     String     @db.VarChar(255)
-    image_url String     @db.VarChar(255)
-    invoices  invoices[]
-  }
+model customers {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String     @db.VarChar(255)
+  email     String     @unique
+  image_url String     @db.VarChar(255)
+  invoices  invoices[]
+}
 
-  model invoices {
-    id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    customer_id String    @db.Uuid
-    customer    customers @relation(fields: [customer_id], references: [id])
-    slug        String?   @unique
-    amount      Int
-    status      String    @db.VarChar(255)
-    date        DateTime  @db.Date
-  }
+model invoices {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  customer_id String    @db.Uuid
+  customer    customers @relation(fields: [customer_id], references: [id])
+  slug        String?   @unique
+  amount      Int
+  status      String    @db.VarChar(255)
+  date        DateTime  @db.Date
+}
 
-  model revenue {
-    month     String @unique @db.VarChar(4)
-    revenue   Int
-  }
+model revenue {
+  month   String @unique @db.VarChar(4)
+  revenue Int
+}
 
-  model users {
-    id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    name           String  @db.VarChar(255)
-    email          String  @unique
-    password       String
-    ownedTasks     tasks[] @relation("TaskOwner")
-    executingTasks tasks[] @relation("TaskExecutors")
-    roleId         Int     @db.Integer
-    role           role    @relation(fields: [roleId], references: [id])
-  }
+model users {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String  @db.VarChar(255)
+  email          String  @unique
+  password       String
+  ownedTasks     tasks[] @relation("TaskOwner")
+  executingTasks tasks[] @relation("TaskExecutors")
+  roleId         Int     @db.Integer
+  role           role    @relation(fields: [roleId], references: [id])
+}
 
-  model tasks {
-    id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-    title     String  @db.VarChar(255)
-    column    column  @relation("TasksOfColumn", fields: [columnId], references: [id])
-    owner_id  String  @db.Uuid
-    owner     users   @relation("TaskOwner", fields: [owner_id], references: [id])
-    executors users[] @relation("TaskExecutors")
-    columnId  Int   @db.Integer
-  }
+model tasks {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String  @db.VarChar(255)
+  column    column  @relation("TasksOfColumn", fields: [columnId], references: [id])
+  owner_id  String  @db.Uuid
+  owner     users   @relation("TaskOwner", fields: [owner_id], references: [id])
+  executors users[] @relation("TaskExecutors")
+  columnId  Int     @db.Integer
 
-  model column {
-    id        Int  @id @default(autoincrement()) 
-    name      String  @db.VarChar(255)
-    tasks     tasks[] @relation("TasksOfColumn")
-  }
-  // roles should be created in such a way to represent the different departments
-  model role {
-    id        Int    @id @default(autoincrement())
-    name      String @db.VarChar(255)
-    level     Int
-    parentId  Int?
-    parent    role? @relation("roleHeirarchy", fields: [parentId], references: [id])
-    children  role[] @relation("roleHeirarchy")
-    users     users[]
-  }
+  @@unique([title, owner_id], name: "title_owner_id")
+}
+
+model column {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique @db.VarChar(255)
+  tasks tasks[] @relation("TasksOfColumn")
+}
+
+// roles should be created in such a way to represent the different departments
+model role {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique @db.VarChar(255)
+  level    Int
+  parentId Int?
+  parent   role?   @relation("roleHeirarchy", fields: [parentId], references: [id])
+  children role[]  @relation("roleHeirarchy")
+  users    users[]
+}

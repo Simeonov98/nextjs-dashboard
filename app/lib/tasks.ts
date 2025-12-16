@@ -7,52 +7,102 @@ import { userAgent } from 'next/server';
 
 
 
-export async function fetchAllTasks(userId: string) {
+// export async function fetchAllTasks(userId: string) {
+//   const user = await prisma.users.findUnique({
+//     where: { id: userId },
+//     include: { role: true }
+//   })
+//   if (!user) throw new Error('User not found')
+//     // if a user's role is higher than employee show the tasks of all users that are his subordinates
+//   if (user.role.level < 8) {
+//     return prisma.tasks.findMany({
+//       where: {
+//         owner: {
+//           role: {
+//             level: {
+//               gte: user.role.level,
+//             },
+//           },
+//         },
+//       },
+//       include: {
+//         owner: {
+//           include: {
+//             role: true,
+//           }
+//         },
+//         column: true,
+//         executors: true,
+//       }
+//     })
+//   } else {            // else just show the tasks assigned to the user
+//     return prisma.tasks.findMany({
+//       where: {
+//         executors: {
+//           some: {
+//             id: userId, // <- the ID of the user you're checking
+//           },
+//         },
+//       },
+//       include: {
+//         owner: true,
+//         executors: true,
+//         column: true,
+//       },
+//     });
+
+//   }
+// }
+  
+export async function fetchAllTasks(userId: string) { // updated for deeper heirarchy trees
   const user = await prisma.users.findUnique({
     where: { id: userId },
     include: { role: true }
-  })
-  if (!user) throw new Error('User not found')
-    // if a user's role is higher than employee show the tasks of all users that are his subordinates
-  if (user.role.level < 3) {
-    return prisma.tasks.findMany({
-      where: {
-        owner: {
-          role: {
-            level: {
-              gte: user.role.level,
-            },
-          },
-        },
-      },
-      include: {
-        owner: {
-          include: {
-            role: true,
-          }
-        },
-        column: true,
-        executors: true,
-      }
-    })
-  } else {            // else just show the tasks assigned to the user
-    return prisma.tasks.findMany({
-      where: {
-        executors: {
-          some: {
-            id: userId, // <- the ID of the user you're checking
-          },
-        },
-      },
-      include: {
-        owner: true,
-        executors: true,
-        column: true,
-      },
-    });
+  });
+  if (!user) throw new Error('User not found');
 
-  }
+  // Step 1: get all subordinate roles
+  const subordinateRoles = await prisma.$queryRaw<{ id: number }[]>`
+    WITH RECURSIVE role_tree AS (
+      SELECT id
+      FROM role
+      WHERE id = ${user.roleId}
+
+      UNION ALL
+
+      SELECT r.id
+      FROM role r
+      JOIN role_tree rt ON r."parentId" = rt.id
+    )
+    SELECT id FROM role_tree
+  `;
+  const subordinateRoleIds = subordinateRoles.map(r => r.id);
+
+  // Step 2: get all users in those roles
+  const subordinateUsers = await prisma.users.findMany({
+    where: { roleId: { in: subordinateRoleIds } },
+    select: { id: true }
+  });
+  const subordinateUserIds = subordinateUsers.map(u => u.id);
+
+  // Step 3: fetch tasks
+  const tasks = await prisma.tasks.findMany({
+    where: {
+      OR: [
+        { owner_id: { in: subordinateUserIds } },
+        { executors: { some: { id: { in: subordinateUserIds } } } },
+      ],
+    },
+    include: {
+      owner: { include: { role: true } },
+      column: true,
+      executors: true,
+    },
+  });
+
+  return tasks;
 }
+
 
 export async function createTask(title: string, columnId: number, user: users, executorsIds?: string[]) {
   // const user = session?.user

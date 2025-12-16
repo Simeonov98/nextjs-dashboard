@@ -203,12 +203,12 @@ export type columnOrderByWithRelationInput = {
 
 export type columnWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  name?: string
   AND?: Prisma.columnWhereInput | Prisma.columnWhereInput[]
   OR?: Prisma.columnWhereInput[]
   NOT?: Prisma.columnWhereInput | Prisma.columnWhereInput[]
-  name?: Prisma.StringFilter<"column"> | string
   tasks?: Prisma.TasksListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type columnOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

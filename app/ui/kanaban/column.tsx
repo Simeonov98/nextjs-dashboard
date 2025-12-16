@@ -29,7 +29,7 @@ export const Column = ({
 
   //title==column.name 
   const filteredCards = cards.filter((card) => card.columnId === columnId);
-  //console.log(`Filtered Cards for ${cards.forEach((card)=>card.column)} columnId===> ${columnId}: ${JSON.stringify(filteredCards, null, 4)}`);
+  console.log(`Filtered Cards for ${cards.forEach((card)=>card.column)} columnId===> ${columnId}: ${JSON.stringify(filteredCards, null, 4)}`);
   // console.log('Filtered Cards:', JSON.stringify(filteredCards, null, 4));
   // console.log('Unfiltered Cards:', JSON.stringify(cards, null, 4));
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, card: CardsType) => {

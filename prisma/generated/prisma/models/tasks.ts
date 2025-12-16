@@ -225,6 +225,7 @@ export type tasksOrderByWithRelationInput = {
 
 export type tasksWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  title_owner_id?: Prisma.tasksTitle_owner_idCompoundUniqueInput
   AND?: Prisma.tasksWhereInput | Prisma.tasksWhereInput[]
   OR?: Prisma.tasksWhereInput[]
   NOT?: Prisma.tasksWhereInput | Prisma.tasksWhereInput[]
@@ -234,7 +235,7 @@ export type tasksWhereUniqueInput = Prisma.AtLeast<{
   column?: Prisma.XOR<Prisma.ColumnScalarRelationFilter, Prisma.columnWhereInput>
   owner?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   executors?: Prisma.UsersListRelationFilter
-}, "id">
+}, "id" | "title_owner_id">
 
 export type tasksOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -317,6 +318,11 @@ export type TasksListRelationFilter = {
 
 export type tasksOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type tasksTitle_owner_idCompoundUniqueInput = {
+  title: string
+  owner_id: string
 }
 
 export type tasksCountOrderByAggregateInput = {

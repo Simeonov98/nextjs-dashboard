@@ -233,16 +233,16 @@ export type roleOrderByWithRelationInput = {
 
 export type roleWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  name?: string
   AND?: Prisma.roleWhereInput | Prisma.roleWhereInput[]
   OR?: Prisma.roleWhereInput[]
   NOT?: Prisma.roleWhereInput | Prisma.roleWhereInput[]
-  name?: Prisma.StringFilter<"role"> | string
   level?: Prisma.IntFilter<"role"> | number
   parentId?: Prisma.IntNullableFilter<"role"> | number | null
   parent?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.roleWhereInput> | null
   children?: Prisma.RoleListRelationFilter
   users?: Prisma.UsersListRelationFilter
-}, "id">
+}, "id" | "name">
 
 export type roleOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

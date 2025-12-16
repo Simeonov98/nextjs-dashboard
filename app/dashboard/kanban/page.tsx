@@ -19,14 +19,20 @@ export default async function KanbanPage() {
     include: {
       role: {
         include: {
-          children: true, // get child roles
+          children: {
+            include: {
+              users: true
+            }
+          }, // get child roles
         },
       },
     },
   });
   if (!fullUser) return null;
 
+  // const childRoleIds = fullUser.role.children.map((r) => r.id);
   const childRoleIds = fullUser.role.children.map((r) => r.id);
+
 
   // Fetch users with those roles
   const childUsers = await prisma.users.findMany({
@@ -36,6 +42,31 @@ export default async function KanbanPage() {
   });
 
   console.log('FULL USER', fullUser);
+
+  const subordinates = await prisma.$queryRaw<users[]>`
+  WITH RECURSIVE role_tree as (
+    SELECT id
+  FROM role
+  WHERE id = ${fullUser.roleId}
+
+  UNION ALL
+
+  SELECT r.id
+  FROM role r
+  JOIN role_tree rt ON r."parentId" = rt.id
+  )
+  SELECT u.*
+  FROM users u
+  WHERE u."roleId" IN (SELECT id FROM role_tree)
+  AND u.id != ${fullUser.id};
+  `;
+
+
+
+
+
+
+
   // const tasks=await fetchAllTasks(fullUser.id)
   // if(!tasks) return null;
   // const columns=await fetchAllColumns()
@@ -48,8 +79,9 @@ export default async function KanbanPage() {
         <div className="p-4 font-bold border rounded-xl text-blue-500">Kanban Board</div>
         <p className="p-4 font-bold border rounded-xl text-indigo-500">{fullUser.name}</p>
         <p className="p-4 font-bold border rounded-xl text-indigo-500">{fullUser.email}</p>
+        <p className="p-4 font-bold border rounded-xl text-indigo-500">{subordinates.length}</p>
       </div>
-      <Board user={fullUser} childUsers={childUsers} />
+      <Board user={fullUser} childUsers={subordinates} />
     </div>
   );
 }

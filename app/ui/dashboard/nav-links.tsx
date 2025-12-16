@@ -19,7 +19,7 @@ const links = [
   { name: 'Invoices', href: '/dashboard/invoices', icon: DocumentDuplicateIcon, },
   { name: 'Customers', href: '/dashboard/customers', icon: UserGroupIcon },
   { name: 'Kanban', href: '/dashboard/kanban', icon: TableCellsIcon },
-  { name: 'Add User', href: '/dashboard/adduser', icon: UserPlusIcon,requiresLevel:3 }
+  { name: 'Add User', href: '/dashboard/adduser', icon: UserPlusIcon,requiresLevel:7 }
 ];
 
 export default function NavLinks({user}:{user:(users&{role:{level:number}})}) {

@@ -187,14 +187,14 @@ export type customersOrderByWithRelationInput = {
 
 export type customersWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  email?: string
   AND?: Prisma.customersWhereInput | Prisma.customersWhereInput[]
   OR?: Prisma.customersWhereInput[]
   NOT?: Prisma.customersWhereInput | Prisma.customersWhereInput[]
   name?: Prisma.StringFilter<"customers"> | string
-  email?: Prisma.StringFilter<"customers"> | string
   image_url?: Prisma.StringFilter<"customers"> | string
   invoices?: Prisma.InvoicesListRelationFilter
-}, "id">
+}, "id" | "email">
 
 export type customersOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
