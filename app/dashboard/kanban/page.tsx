@@ -79,7 +79,7 @@ export default async function KanbanPage() {
         <div className="p-4 font-bold border rounded-xl text-blue-500">Kanban Board</div>
         <p className="p-4 font-bold border rounded-xl text-indigo-500">{fullUser.name}</p>
         <p className="p-4 font-bold border rounded-xl text-indigo-500">{fullUser.email}</p>
-        <p className="p-4 font-bold border rounded-xl text-indigo-500">{subordinates.length}</p>
+        <p className="p-4 font-bold border rounded-xl text-indigo-500">Subordinates: {subordinates.length}</p>
       </div>
       <Board user={fullUser} childUsers={subordinates} />
     </div>
